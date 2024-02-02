@@ -1,0 +1,28 @@
+
+{% extends 'critical/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div style="margin-top:25px; margin-bottom:50px; margin-left:300px">
+    <button onclick="window.location.href ={% url 'add-ticket' %}" style="margin-left:200px">Demander une critique</button>
+    <button onclick="window.location.href ={% url 'add-ticket-and-review' %}" style="margin-left:200px">Créer une critique</button>
+</div>
+<div class="container">
+  <div class="row">
+      <div class="col-sm"></div>
+      <div class="col-sm" style="border:solid">
+        {% for instance in reviews_and_tickets %}
+            {% if instance.content_type == 'Review' %}
+                {% include 'critical/partials/critical_snippet_review.html' with review=instance %}
+            {% elif instance.content_type == 'Ticket' %}
+                {% include 'critical/partials/critical_snippet_ticket.html' with ticket=instance %}
+            {% endif %}
+        {% endfor %}
+      </div>
+      <div class="col-sm"></div>
+  </div>
+    {% if user.is_authenticated %}
+    <p>Vous êtes connecté en tant que {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,40 @@
+{% extends 'critical/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h6 style="text-align:center; margin-top:50px">Suivre d'autres utilisateurs</h6>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm"></div>
+        <div class="col-sm">
+            <form action="" method="post" style="margin-left:75px; margin-top:25px">
+                {% csrf_token %}
+                <input type="text" name="username">
+                <input type="hidden" name="action" value="follow">
+                <input type="submit" value="S'abonner">
+            </form>
+            <ul class="list-group" style="margin-top:50px">
+                <h6 style="margin-bottom:25px; text-align:center">Abonnements</h6>
+                {% for user_follow in user.following.all %}
+                <li class="list-group-item">{{ user_follow.followed_user }}</li>
+                <form action="" method="post" style="margin-left:75px; margin-top:25px">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{user_follow.id}}">
+                    <input type="hidden" name="action" value="unfollow">
+                    <input type="submit" value="Se désabonner">
+                </form>
+                {% endfor %}
+            </ul>
+            <hr>
+            <ul class="list-group" style="margin-top:50px">
+                <h6 style="margin-bottom:25px; text-align:center">Abonnés</h6>
+                {% for user_follow in user.followed_by.all %}
+                <li class="list-group-item">{{ user_follow.user }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-sm"></div>
+    </div>
+</div>
+{% endblock content %}

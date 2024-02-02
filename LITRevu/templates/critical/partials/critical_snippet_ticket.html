@@ -1,0 +1,10 @@
+<p>{{ instance.user }} a demandé une critique</p>
+<ul class="list-group">
+    <li class="list-group-item">{{ instance.title }}</li>
+    <li class="list-group-item">{{ instance.description }}</li>
+    <li class="list-group-item"><p><strong>Ecrit par {{ instance.user }}</strong></p></li>
+    {% if ticket.image %}
+    <li class="list-group-item"><img src="{{ instance.image.url }}" style="width: 200px; height: 200px;"></li>
+    {% endif %}
+    <li class="list-group-item" >{{ ticket.time_created }}</li>
+</ul>

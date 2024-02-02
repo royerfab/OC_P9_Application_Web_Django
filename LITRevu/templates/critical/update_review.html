@@ -1,0 +1,18 @@
+{% extends 'critical/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h4 style="text-align:center">Modifier votre critique</h4>
+
+<form action="" method="post" style="margin-top:100px; text-align:center">
+<div class="row">
+    <div class="col-15">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Envoyer">
+    </div>
+</div>
+</form>
+
+{% endblock %}

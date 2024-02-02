@@ -1,0 +1,8 @@
+<h2 style="text-align:center">Supprimer la critique</h2>
+
+<p style="margin-top:100px; text-align:center">Etes-vous sûr de vouloir supprimer la critique : {{ review.name }} ?</p>
+
+<form action="" method="post" style="text-align:center">
+{% csrf_token %}
+<input type="submit" value="Supprimer">
+</form>

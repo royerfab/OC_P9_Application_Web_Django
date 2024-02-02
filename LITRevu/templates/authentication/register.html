@@ -1,0 +1,19 @@
+{% extends 'authentication/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<form method="POST" action="">
+<div class="row">
+  <div class="col-4"></div>
+  <div class="col-4">
+    {% csrf_token %}
+    <h2 style="margin-left:90px">Inscrivez-vous</h2>
+    {{ form|crispy }}
+    <input type="submit" value="S'inscrire" style="margin-left:75px"/>
+    <a href="{% url 'login' %}" style="margin-left:75px">Retourner</a>
+  </div>
+  <div class="col-4"></div>
+</div>
+</form>
+
+{% endblock content%}

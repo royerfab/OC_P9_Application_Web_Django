@@ -1,0 +1,52 @@
+{% extends 'critical/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h4 style="text-align:center">Vos posts</h4>
+<div class="container">
+  <div class="row">
+      <div class="col-sm"></div>
+      <div class="col-sm" style="border:solid">
+        <ul class="list-group">
+            {% for ticket in tickets %}
+            <p>Vous avez publié un ticket</p>
+            <li class="list-group-item">{{ ticket.title }}</li>
+            <li class="list-group-item">{{ ticket.description }}</li>
+            <li class="list-group-item">{{ ticket.user }}</li>
+            {% if ticket.image %}
+            <li class="list-group-item"><img src="{{ ticket.image.url }}" alt="" style="width:100px; height:50px;"> </li>
+            {% endif %}
+            <li class="list-group-item" >{{ ticket.time_created }}</li>
+            <a href="{% url 'update-ticket' ticket.id %}">
+                <button style="margin-left:00px">Modifier</button>
+            </a>
+            <a href="{% url 'delete-ticket' ticket.id %}">
+                <button style="margin-left:00px">Supprimer un ticket</button>
+            </a>
+            {% endfor %}
+            <hr>
+            {% for review in reviews %}
+            <p>Vous avez publié une critique</p>
+            <li class="list-group-item">{{ review.name }}</li>
+            <li class="list-group-item">{{ review.ticket.title }}</li>
+            <li class="list-group-item">{{ review.rating }}</li>
+            <li class="list-group-item">{{ review.user }}</li>
+            <li class="list-group-item">{{ review.headline }}</li>
+            <li class="list-group-item">{{ review.body }}</li>
+            <li class="list-group-item">{{ review.time_created }}</li>
+            <li>
+                <a href="{% url 'update-review' review.id %}">Modifier</a>
+                <a href="{% url 'delete-review' review.id %}">Supprimer une critique</a>
+            </li>
+            {% endfor %}
+        </ul>
+      </div>
+      <div class="col-sm"></div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
