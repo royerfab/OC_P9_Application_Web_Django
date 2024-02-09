@@ -1,10 +1,15 @@
-<p>{{ instance.user }} a demandé une critique</p>
+<div style="display: flex; margin-top: 20px">
+    <p>{{ instance.user }} a demandé une critique</p>
+    <p style="margin-left: 40px" >{{ ticket.time_created }}</p>
+</div>
 <ul class="list-group">
+    <li class="list-group-item">Ticket - {{ instance.user }}</li>
     <li class="list-group-item">{{ instance.title }}</li>
     <li class="list-group-item">{{ instance.description }}</li>
-    <li class="list-group-item"><p><strong>Ecrit par {{ instance.user }}</strong></p></li>
     {% if ticket.image %}
-    <li class="list-group-item"><img src="{{ instance.image.url }}" style="width: 200px; height: 200px;"></li>
+    <li class="list-group-item"><img src="{{ instance.image.url }}" style="width: 100px; height: 150px;"></li>
     {% endif %}
-    <li class="list-group-item" >{{ ticket.time_created }}</li>
 </ul>
+<a href="{% url 'add-review' ticket.id %}">
+    <button style="margin-left:250px">Créer une critique</button>
+</a>

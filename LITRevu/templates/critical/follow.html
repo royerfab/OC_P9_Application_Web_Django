@@ -17,13 +17,14 @@
             <ul class="list-group" style="margin-top:50px">
                 <h6 style="margin-bottom:25px; text-align:center">Abonnements</h6>
                 {% for user_follow in user.following.all %}
-                <li class="list-group-item">{{ user_follow.followed_user }}</li>
-                <form action="" method="post" style="margin-left:75px; margin-top:25px">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value="{{user_follow.id}}">
-                    <input type="hidden" name="action" value="unfollow">
-                    <input type="submit" value="Se désabonner">
-                </form>
+                <li class="list-group-item" style="display: flex">{{ user_follow.followed_user }}
+                    <form action="" method="post" style="margin-left:250px; margin-bottom:0px">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{user_follow.id}}">
+                        <input type="hidden" name="action" value="unfollow">
+                        <input type="submit" value="Désabonner">
+                    </form>
+                </li>
                 {% endfor %}
             </ul>
             <hr>
