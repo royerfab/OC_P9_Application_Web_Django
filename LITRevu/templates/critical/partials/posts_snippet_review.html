@@ -1,0 +1,17 @@
+<div style="display: flex; margin-top: 20px">
+    <p>{{ instance.user }} a publié une critique</p>
+    <p style="margin-left: 50px">{{ instance.time_created }}</p>
+</div>
+<ul class="list-group">
+    <li class="list-group-item">{{ instance.headline }}</li>
+    <li class="list-group-item">{{ instance.display_rating | safe }}</li>
+    <li class="list-group-item">{{ instance.body }}</li>
+    <li class="list-group-item">
+        <p>Ticket - {{ instance.ticket.user }}</p>
+        <p>{{ instance.ticket.title }}</p>
+        <p>{{ instance.ticket.description }}</p>
+        {% if instance.ticket.image %}
+        <img src="{{ instance.ticket.image.url }}" style="width: 100px; height: 150px;">
+        {% endif %}
+    </li>
+</ul>
