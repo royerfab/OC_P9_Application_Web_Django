@@ -4,8 +4,8 @@
 
 {% block content %}
 <div style="margin-top:25px; margin-bottom:50px; margin-left:300px">
-    <button onclick="window.location.href ={% url 'add-ticket' %}" style="margin-left:200px">Demander une critique</button>
-    <button onclick="window.location.href ={% url 'add-ticket-and-review' %}" style="margin-left:200px">Créer une critique</button>
+    <button onclick="window.location.href ={% url 'add-ticket' %}" style="margin-left:200px" aria-label="Demander une critique">Demander une critique</button>
+    <button onclick="window.location.href ={% url 'add-ticket-and-review' %}" style="margin-left:200px" aria-label="Créer une critique">Créer une critique</button>
 </div>
 <div class="container">
   <div class="row">
@@ -21,8 +21,5 @@
       </div>
       <div class="col-sm"></div>
   </div>
-    {% if user.is_authenticated %}
-    <p>Vous êtes connecté en tant que {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
-    {% endif %}
 </div>
 {% endblock content %}

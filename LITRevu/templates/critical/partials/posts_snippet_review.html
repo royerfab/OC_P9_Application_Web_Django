@@ -1,6 +1,6 @@
-<div style="display: flex; margin-top: 20px">
-    <p>{{ instance.user }} a publié une critique</p>
-    <p style="margin-left: 50px">{{ instance.time_created }}</p>
+<div style="display: flex; margin-top: 20px; ">
+    <p >Vous avez publié une critique</p>
+    <p style=" margin-left: 50px">{{ review.time_created }}</p>
 </div>
 <ul class="list-group">
     <li class="list-group-item">{{ instance.headline }}</li>
@@ -14,4 +14,12 @@
         <img src="{{ instance.ticket.image.url }}" style="width: 100px; height: 150px;">
         {% endif %}
     </li>
+    <div>
+        <a href="{% url 'update-review' review.id %}" style="margin-left: 225px">
+            <button style="margin-left:00px" aria-label="Modifier la critique">Modifier</button>
+        </a>
+        <a href="{% url 'delete-review' review.id %}" style="margin-left: 10px">
+            <button style="margin-left:00px" aria-label="Supprimer la critique">Supprimer</button>
+        </a>
+    </div>
 </ul>

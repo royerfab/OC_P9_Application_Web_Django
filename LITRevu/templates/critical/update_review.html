@@ -5,12 +5,35 @@
 
 <h4 style="text-align:center">Modifier votre critique</h4>
 
+<div style="display: flex; margin-top: 20px; margin-left: 500px">
+    <p >Vous êtes en train de poster en réponse à</p>
+    <p style=" margin-left: 70px">{{ instance.ticket.time_created }}</p>
+</div>
+<div class="container">
+  <div class="row">
+      <div class="col-sm"></div>
+      <div class="col-sm">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <p>Ticket - {{ review.ticket.user }}</p>
+                <p>{{ review.ticket.title }}</p>
+                <p>{{ review.ticket.description }}</p>
+                {% if review.ticket.image %}
+                <img src="{{ review.ticket.image.url }}" style="width: 100px; height: 150px;">
+                {% endif %}
+            </li>
+        </ul>
+      </div>
+      <div class="col-sm"></div>
+  </div>
+</div>
+<h6 style ="text-align: center; margin-top: 50px">Critique</h6>
 <form action="" method="post" style="margin-top:100px; text-align:center">
 <div class="row">
     <div class="col-15">
       {% csrf_token %}
       {{ form.as_p }}
-      <input type="submit" value="Envoyer">
+      <input type="submit" value="Envoyer" aria-label="Modifier la critique">
     </div>
 </div>
 </form>

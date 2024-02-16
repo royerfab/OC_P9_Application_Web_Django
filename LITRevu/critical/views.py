@@ -10,6 +10,17 @@ from django import template
 from django.db.models import CharField, Value
 
 
+'''
+Home page, display all tickets and reviews from the user and the followed users.
+
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+
+Returns:
+    tupple contenant : toutes les informations de la requête, le template de la page html,un dictionnaire de la liste 
+    des dictionnaires des informations des critiques et des tickets.
+
+'''
 @login_required
 def home(request):
     #récupérer tous les user follows et trier pour ceux suivis par ce user
@@ -39,7 +50,17 @@ def home(request):
     }
     return render(request, 'critical/home.html', context=context)
 
+'''
+Create a new ticket, asking for the creation of a review.
 
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+
+Returns:
+    tupple contenant : toutes les informations de la requête, le template de la page html,
+    le formulaire de création d'un ticket.
+
+'''
 @login_required
 def add_ticket(request):
     form = TicketForm()
@@ -51,30 +72,54 @@ def add_ticket(request):
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.save()
-            return redirect('posts')
+            return redirect('home')
 
     return render(request,
             'critical/add_ticket.html',
             {'form': form})
 
+'''
+Create a new review, from an existing ticket.
+
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+    ticket_id : id du ticket à partir duquel une critique va être créé.
+
+Returns:
+    tupple contenant : toutes les informations de la requête, le template de la page html,un dictionnaire de la liste 
+    des dictionnaires des informations des tickets et le formulaire de création d'une critique.
+'''
 @login_required
 def add_review(request, ticket_id):
     form = ReviewForm()
+    ticket = Ticket.objects.get(id=ticket_id)
+    if ticket.review_set.exists():
+        return redirect('home')
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
-            ticket = Ticket.objects.get(id=ticket_id)
             # créer une nouvelle « Review » et la sauvegarder dans la db
             review = form.save(commit=False)
             review.user = request.user
             review.ticket = ticket
             review.save()
-            return redirect('posts')
+            return redirect('home')
 
     return render(request,
             'critical/add_review.html',
-            {'form': form})
+            {'form': form, 'ticket': ticket})
 
+'''
+Create a new ticket and at the same time a new review for this ticket.
+
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+
+Returns:
+    tupple contenant : toutes les informations de la requête, le template de la page html,un dictionnaire de la liste des
+     dictionnaires des formulaires pour créer des critiques et des tickets
+
+'''
 @login_required
 def add_ticket_and_review(request):
     ticket_form = TicketForm()
@@ -92,7 +137,7 @@ def add_ticket_and_review(request):
             review.user = request.user
             review.ticket = ticket
             review.save()
-            return redirect('posts')
+            return redirect('home')
 
 
 
@@ -101,13 +146,32 @@ def add_ticket_and_review(request):
             {'ticket_form': ticket_form, 'review_form': review_form})
 
 
+'''
+Display all tickets and reviews from the user, with the possibility to update or remove them.
+
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+
+Returns:
+    tupple contenant : toutes les informations de la requête, le template de la page html,un dictionnaire de la liste des
+     dictionnaires des informations des critiques et des tickets
+
+'''
 @login_required
 def ticket_list(request):
-    tickets = Ticket.objects.all()
-    reviews = Review.objects.all()
+    reviews = Review.objects.filter(user=request.user)
+    reviews = reviews.annotate(content_type=Value("Review", CharField()))
+    tickets = Ticket.objects.filter(user=request.user)
+    tickets = tickets.annotate(content_type=Value("Ticket", CharField()))
+
+    reviews_and_tickets = sorted(
+        chain(reviews, tickets),
+        key=lambda instance: instance.time_created,
+        reverse=True
+    )
     return render(request,
                   'critical/posts.html',
-                  {'tickets': tickets, 'reviews': reviews})
+                  {'reviews_and_tickets': reviews_and_tickets})
 
 def review_list(request):
     reviews = Review.objects.all()
@@ -121,6 +185,18 @@ def review_detail(request, review_id):
                   'critical/posts.html',
                   {'review': review})
 
+'''
+Update an already existing ticket.
+
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+    id : id du ticket à modifier.
+
+Returns:
+    tupple contenant toutes les informations de la requête, le template de la page html,un dictionnaire de la liste des
+     dictionnaires des informations du formulaire pour modifier un ticket existant.
+
+'''
 @login_required
 def update_ticket(request, id):
     ticket = Ticket.objects.get(id=id)
@@ -136,6 +212,18 @@ def update_ticket(request, id):
                 'critical/update_ticket.html',
                 {'form': form})
 
+'''
+Update an already existing review.
+
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+    id : id de la critique à modifier.
+
+Returns:
+    tupple contenant toutes les informations de la requête, le template de la page html,un dictionnaire de la liste des
+     dictionnaires des informations des tickets et du formulaire pour modifier une critique existante.
+
+'''
 @login_required
 def update_review(request, id):
     review = Review.objects.get(id=id)
@@ -149,18 +237,43 @@ def update_review(request, id):
 
     return render(request,
                 'critical/update_review.html',
-                {'form': form})
+                {'form': form, 'review': review})
+
+'''
+Delete an already existing ticket.
+
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+    id : id du ticket à supprimer.
+
+Returns:
+    tupple contenant toutes les informations de la requête, le template de la page html,un dictionnaire de la liste des
+     dictionnaires des informations des tickets.
+
+'''
 @login_required
 def delete_ticket(request, id):
     ticket = Ticket.objects.get(id=id)
 
     if request.method == 'POST':
         ticket.delete()
-        return redirect('posts')
+        return redirect('home')
     return render(request,
                     'critical/delete_ticket.html',
                     {'ticket': ticket})
 
+'''
+Update an already existing review.
+
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+    id : id de la critique à supprimer.
+
+Returns:
+    tupple contenant toutes les informations de la requête, le template de la page html,un dictionnaire de la liste des
+     dictionnaires des informations des critiques.
+
+'''
 @login_required
 def delete_review(request, id):
     review = Review.objects.get(id=id)
@@ -168,12 +281,22 @@ def delete_review(request, id):
     #return redirect('posts')
     if request.method == 'POST':
         review.delete()
-        return redirect('posts')
+        return redirect('home')
 
     return render(request,
                     'critical/delete_review.html',
                     {'review': review})
 
+'''
+Display all the followed and following users of the user, possibility to subscribe or unsubscribe.
+
+Parameters:
+    request: objet contenant toutes les informations de la requête.
+
+Returns:
+    tupple contenant toutes les informations de la requête, le template de la page html.
+
+'''
 @login_required
 def follow(request):
     if request.method == 'POST':

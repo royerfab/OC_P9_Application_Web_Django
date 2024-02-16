@@ -1,6 +1,6 @@
-<div style="display: flex; margin-top: 20px">
-    <p>{{ instance.user }} a demandé une critique</p>
-    <p style="margin-left: 40px" >{{ ticket.time_created }}</p>
+<div style="display: flex; margin-top: 20px; ">
+    <p >Vous avez publié un ticket</p>
+    <p style=" margin-left: 70px">{{ ticket.time_created }}</p>
 </div>
 <ul class="list-group">
     <li class="list-group-item">Ticket - {{ instance.user }}</li>
@@ -10,8 +10,11 @@
     <li class="list-group-item"><img src="{{ instance.image.url }}" style="width: 100px; height: 150px;"></li>
     {% endif %}
 </ul>
-{% if not ticket.review_set.exists %}
-<a href="{% url 'add-review' ticket.id %}">
-    <button style="margin-left:250px">Créer une critique</button>
-</a>
-{% endif %}
+<div >
+    <a href="{% url 'update-ticket' ticket.id %}" style="margin-left: 225px">
+        <button style="margin-left:00px" aria-label="Modifier le ticket">Modifier</button>
+    </a>
+    <a href="{% url 'delete-ticket' ticket.id %}" style="margin-left: 10px">
+        <button style="margin-left:00px" aria-label="Supprimer le ticket">Supprimer</button>
+    </a>
+</div>

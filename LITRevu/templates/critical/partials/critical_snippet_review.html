@@ -4,7 +4,7 @@
 </div>
 <ul class="list-group">
     <li class="list-group-item">{{ instance.headline }}</li>
-    <li class="list-group-item">{{ instance.rating }}</li>
+    <li class="list-group-item">{{ instance.display_rating | safe }}</li>
     <li class="list-group-item">{{ instance.body }}</li>
     <li class="list-group-item">
         <p>Ticket - {{ instance.ticket.user }}</p>

@@ -10,6 +10,8 @@
     <li class="list-group-item"><img src="{{ instance.image.url }}" style="width: 100px; height: 150px;"></li>
     {% endif %}
 </ul>
+{% if not ticket.review_set.exists %}
 <a href="{% url 'add-review' ticket.id %}">
-    <button style="margin-left:250px">Créer une critique</button>
+    <button style="margin-left:250px" aria-label="Créer une critique">Créer une critique</button>
 </a>
+{% endif %}

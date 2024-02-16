@@ -12,7 +12,7 @@
       {% csrf_token %}
       {{ ticket_form.as_p }}
         <hr>{{ review_form.as_p }}
-      <input type="submit" value="Envoyer">
+      <input type="submit" value="Envoyer" aria-label="Créer un ticket et sa critique">
   </div>
 </div>
 </form>

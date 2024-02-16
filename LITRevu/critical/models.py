@@ -20,6 +20,16 @@ class Review(models.Model):
     body = models.TextField(max_length=8192, blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def display_rating(self):
+        full_star = ''
+        empty_star = ''
+        for i in range(self.rating):
+            full_star += '<i class="bi bi-star-fill"></i>'
+        for i in range(5-self.rating):
+            empty_star += '<i class="bi bi-star"></i>'
+        return full_star + empty_star
+
 class UserFollows(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='following')
     followed_user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='followed_by')

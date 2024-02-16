@@ -12,7 +12,7 @@
                 {% csrf_token %}
                 <input type="text" name="username">
                 <input type="hidden" name="action" value="follow">
-                <input type="submit" value="S'abonner">
+                <input type="submit" value="S'abonner" aria-label="S'abonner">
             </form>
             <ul class="list-group" style="margin-top:50px">
                 <h6 style="margin-bottom:25px; text-align:center">Abonnements</h6>
@@ -22,7 +22,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{user_follow.id}}">
                         <input type="hidden" name="action" value="unfollow">
-                        <input type="submit" value="Désabonner">
+                        <input type="submit" value="Désabonner" aria-label="Se désabonner">
                     </form>
                 </li>
                 {% endfor %}

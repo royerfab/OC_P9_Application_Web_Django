@@ -2,66 +2,21 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
 <h4 style="text-align:center">Vos posts</h4>
 <div class="container">
   <div class="row">
       <div class="col-sm"></div>
       <div class="col-sm" style="border:solid">
-        <ul class="list-group">
-            {% for ticket in tickets %}
-            <div style="display: flex; margin-top: 20px; ">
-                <p >Vous avez publié un ticket</p>
-                <p style=" margin-left: 70px">{{ ticket.time_created }}</p>
-            </div>
-            <li class="list-group-item">{{ ticket.user }}</li>
-            <li class="list-group-item">{{ ticket.title }}</li>
-            <li class="list-group-item">{{ ticket.description }}</li>
-            {% if ticket.image %}
-            <li class="list-group-item"><img src="{{ ticket.image.url }}" alt="" style="width:100px; height:150px;"> </li>
+        {% for instance in reviews_and_tickets %}
+            {% if instance.content_type == 'Review' %}
+                {% include 'critical/partials/posts_snippet_review.html' with review=instance %}
+            {% elif instance.content_type == 'Ticket' %}
+                {% include 'critical/partials/posts_snippet_ticket.html' with ticket=instance %}
             {% endif %}
-            <div >
-                <a href="{% url 'update-ticket' ticket.id %}" style="margin-left: 225px">
-                    <button style="margin-left:00px">Modifier</button>
-                </a>
-                <a href="{% url 'delete-ticket' ticket.id %}" style="margin-left: 10px">
-                    <button style="margin-left:00px">Supprimer</button>
-                </a>
-            <div/>
-            {% endfor %}
-            <hr>
-            {% for review in reviews %}
-            <div style="display: flex; margin-top: 20px; ">
-                <p >Vous avez publié une critique</p>
-                <p style=" margin-left: 50px">{{ review.time_created }}</p>
-            </div>
-            <li class="list-group-item">{{ review.headline }}</li>
-            <li class="list-group-item">{{ review.rating }}</li>
-            <li class="list-group-item">{{ review.body }}</li>
-            <li class="list-group-item">
-                <p>Ticket - {{ review.ticket.user }}</p>
-                <p>{{ review.ticket.title }}</p>
-                <p>{{ review.ticket.description }}</p>
-                {% if review.ticket.image %}
-                <img src="{{ review.ticket.image.url }}" style="width: 100px; height: 150px;">
-                {% endif %}
-            </li>
-            <div>
-                <a href="{% url 'update-review' review.id %}" style="margin-left: 225px">
-                    <button style="margin-left:00px">Modifier</button>
-                </a>
-                <a href="{% url 'delete-review' review.id %}" style="margin-left: 10px">
-                    <button style="margin-left:00px">Supprimer</button>
-                </a>
-            <div/>
-            {% endfor %}
-        </ul>
+        {% endfor %}
       </div>
       <div class="col-sm"></div>
   </div>
 </div>
-
-
-
 
 {% endblock %}
